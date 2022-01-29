@@ -1,0 +1,21 @@
+{
+  "name": "website-v2",
+  "author": {
+    "name": "Joshua",
+    "email": "jshsj@hey.com",
+    "url": "https://joshuastuebner.com"
+  },
+  "version": "0.2.0",
+  "private": true,
+  "scripts": {
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "devDependencies": {
+    "astro": "^0.22.20"
+  },
+  "volta": {
+    "node": "16.13.1"
+  }
+}

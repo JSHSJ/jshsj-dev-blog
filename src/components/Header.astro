@@ -1,0 +1,42 @@
+---
+import Themepicker from "./ThemePicker.astro"
+import MobileNav from "./MobileNav.astro"
+import {Navigation} from "@/config/index.ts"
+
+const NavItems = [
+  Navigation.start,
+  Navigation.blogStart,
+]
+---
+<style>
+header {
+  width: 100%;
+  padding-block: var(--size-s);
+  background: var(--surface1);
+  z-index: 999;
+  border-bottom: var(--border-thin) solid var(--text1);
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: var(--size-md);
+}
+</style>
+
+<header>
+  <div class="layout-container | pblock-0">
+  <a href="#content-start" class="text-assistive">Zum Inhalt</a>
+
+  <div class="header-container full-width">
+    <nav class="cluster">
+      {NavItems.map(item => (
+        <a href={item.url}>{item.name}</a>
+      ))}
+    </nav>
+    <div class="ml-auto"><Themepicker></Themepicker></div>
+  </div>
+  </div>
+
+</header>

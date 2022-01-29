@@ -1,0 +1,84 @@
+:root {
+  /* COLORS */
+  --brand-hue: 116;
+  --brand-saturation: 100%;
+  --brand-lightness: 64%;
+
+  --brand2-hue: 22;
+
+  /* LIGHT */
+
+  --brand-light: hsl(var(--brand-hue) 100% 48%);
+  --brand2-light: hsl(var(--brand2-hue) 100% 48%);
+  --text1-light: hsl(var(--brand-hue) 0% 8%);
+  --text2-light: hsl(var(--brand-hue) 3% 24%);
+  --surface1-light: hsl(var(--brand-hue) 0% 97%);
+  --surface2-light: hsl(var(--brand-hue) 16% 92%);
+  --shadow-strength-light: .48;
+  --shadow-color-light: var(--brand-hue), 4%, 8%;
+
+  --shadow-color-background-light: var(--brand-hue), 4%, 8%;
+  --shadow-strength-background-light: 0;
+
+  --code-background-light: hsl(var(--brand-hue) 20% 99%);
+  --code-color-keyword-light: hsl(calc(var(--brand-hue) + 60) 100% 48%);
+  --code-color-string-light: hsl(calc(var(--brand-hue) + 280) 100% 48%);
+  --code-color-punctuation-light: var(--brand);
+  --code-color-operator-light: hsl(calc(var(--brand-hue) + 230) 100% 48%);
+  --code-color-tag-light: hsl(calc(var(--brand-hue)) 100% 16%);
+  --code-color-plain-text-light: var(--text1);
+
+
+  /* DARK */
+
+  --brand-dark: hsl(var(--brand-hue) 100% 48%);
+  --brand2-dark: hsl(var(--brand2-hue) 100% 64%);
+  --text1-dark: hsl(var(--brand-hue) 96% 98%);
+  --text2-dark: hsl(var(--brand-hue) 4% 88%);
+  --surface1-dark: hsl(var(--brand-hue) 6% 1%);
+  --surface2-dark: hsl(var(--brand-hue) 21% 25%);
+
+  --shadow-strength-dark: .88;
+  --shadow-color-dark: var(--brand-hue), 4%, 8%;
+
+  --shadow-color-background-dark: var(--brand-hue), 92%, 88%;
+  --shadow-strength-background-dark: .48;
+
+  --code-background-dark: hsl(var(--brand-hue) 16% 5%);
+  --code-color-keyword-dark: hsl(calc(var(--brand-hue) + 60) 100% 64%);
+  --code-color-string-dark: hsl(calc(var(--brand-hue) + 280) 100% 64%);
+  --code-color-punctuation-dark: var(--brand);
+  --code-color-operator-dark: hsl(calc(var(--brand-hue) + 230) 100% 64%);
+  --code-color-tag-dark: hsl(calc(var(--brand-hue)) 100% 64%);
+  --code-color-plain-text-dark: var(--text1-dark);
+
+  --ratio: 1.48;
+
+
+  --s-5: clamp(0.42625rem, -0.2529411764705882vw + 0.4275rem, 0.21125rem);
+  --s-4: clamp(0.52875rem, -0.25441176470588245vw + 0.53rem, 0.3125rem);
+  --s-3: clamp(0.655625rem, -0.22720588235294117vw + 0.656875rem, 0.4625rem);
+  --s-2: clamp(0.813125rem, -0.150735294117647vw + 0.814375rem, 0.685rem);
+  --s-1: clamp(1.008125rem, 0.00661764705882352vw + 1.008125rem, 1.01375rem);
+  --s0: clamp(1.25rem, 0.29411764705882354vw + 1.24625rem, 1.5rem);
+  --s1: clamp(1.55rem, 0.7882352941176473vw + 1.5375rem, 2.22rem);
+  --s2: clamp(1.921875rem, 1.6044117647058824vw + 1.89125rem, 3.285625rem);
+  --s3: clamp(2.383125rem, 2.916911764705882vw + 2.31375rem, 4.8625rem);
+  --s4: clamp(2.955rem, 4.990441176470588vw + 2.8075rem, 7.196875rem);
+  --s5: clamp(3.664375rem, 8.21985294117647vw + 3.363125rem, 10.65125rem);
+  --s7: clamp(5.634375rem, 20.81911764705882vw + 4.46125rem, 23.330625rem);
+  --s9: clamp(8.66375rem, 49.928676470588236vw + 4.338125rem, 51.103125rem);
+  --s11: clamp(13.32125rem, 116.01764705882354vw + -2.13375rem, 111.93625rem);
+
+  --size-3xs: 0.0875em;
+  --size-2xs: 0.125em;
+  --size-xs: 0.25em;
+  --size-s: 0.5em;
+  --size-md: 1em;
+  --size-lg: 1.5em;
+  --size-xl: 2em;
+  --size-2xl: 3em;
+  --size-3xl: 4em;
+  --size-4xl: 5em;
+}
+

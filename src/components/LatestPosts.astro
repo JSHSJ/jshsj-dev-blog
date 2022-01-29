@@ -1,0 +1,21 @@
+---
+
+import {Navigation} from "@/config/index.ts";
+import BlogList from "@/components/BlogList.astro"
+import IconPageLink from "./icons/Icon-PageLink.astro"
+const { posts } = Astro.props;
+---
+
+
+<div class="section layout-container">
+<div class="with-sidebar full-width">
+  <div class="stack -layout-2xl" data-grow style="--min-size: 60%">
+  <h2 class="typo-2xl typo-hollow -with-dot" data-aside><span>Last 3 posts</span></h2>
+  <BlogList blogPosts={posts} />
+  </div>
+    <div class="cluster extra-links standout-box" data-aside>
+      <a href={Navigation.blogStart.url} class="link-with-icon">
+      <IconPageLink></IconPageLink><span>All posts</span></a>
+    </div>
+    </div>
+</div>

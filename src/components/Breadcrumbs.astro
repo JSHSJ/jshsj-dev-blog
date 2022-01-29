@@ -1,0 +1,41 @@
+---
+export interface Props{
+    crumbs: {
+    url: string,
+    name: string
+  }[]
+}
+
+const {crumbs} = Astro.props;
+---
+
+<style lang="scss">
+
+.breadcrumbs {
+  background-color: var(--text1);
+  color: var(--surface1);
+  width: max-content;
+  max-width: 100%;
+}
+
+.breadcrumbs a {
+  color: inherit;
+}
+
+.breadcrumbs a:not(:last-child) {
+  --fontWeight: var(--fontWeightRegular);
+  &:after {
+    content: ' → '
+  }
+}
+
+
+
+</style>
+
+
+<section class="box -layout-s | breadcrumbs">
+  {crumbs.map((part) => (<a href={part.url}>{part.name}</a>
+  ))}
+</section>
+

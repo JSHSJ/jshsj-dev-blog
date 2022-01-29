@@ -1,0 +1,24 @@
+---
+import Welcome from '@/components/Welcome.astro';
+import ShareTheMeal from "@/components/ShareTheMeal.astro";
+import LatestPosts from "@/components/LatestPosts.astro";
+import { slugify } from '@/utils/slugify';
+import { sortByDateDesc } from '@/utils/sortByDate';
+
+
+import DefaultLayout from "@/layouts/DefaultLayout.astro";
+
+const allBlog = await Astro.fetchContent("../content/**/*.md");
+
+const formattedBlogposts = allBlog.map(bp => ({
+    ...bp,
+    slug: slugify(bp.title),
+})).sort(sortByDateDesc).slice(0, 3)
+---
+<DefaultLayout canonical={Astro.request.canonicalURL}>
+<div class="stack -layout-xl">
+<Welcome />
+<LatestPosts posts={formattedBlogposts} />
+    <ShareTheMeal></ShareTheMeal>
+</div>
+</DefaultLayout>

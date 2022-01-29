@@ -1,0 +1,16 @@
+.link-with-icon {
+  position: inline-block;
+
+  > *:first-child {
+    margin-right: var(--s-3);
+  }
+
+  svg {
+    position: relative;
+    top: 0.125em;
+  }
+
+  span {
+    display: inline;
+  }
+}

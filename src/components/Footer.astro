@@ -1,0 +1,68 @@
+---
+import FurtherQuestions from "./FurtherQuestions.astro"
+import FooterCat from "./FooterCat.astro"
+import {Navigation} from "@/config/index.ts"
+
+const NavItemsLeft = [
+  Navigation.blogStart,
+]
+
+const NavItemsRight = [
+  Navigation.imprint,
+  Navigation.dataPolicy
+]
+
+---
+<style lang="scss">
+footer {
+  width: 100%;
+  z-index: 999;
+  border-top: var(--border-thick) solid var(--text1);
+  position: relative;
+  margin-top: var(--size-4xl);
+  padding-bottom: var(--size-xl);
+}
+
+.footer-container {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr 1fr;
+  align-items: baseline;
+}
+
+.footer-cat {
+  position: absolute;
+  top: 0;
+  width: var(--size-3xl);
+  font-size: var(--s2);
+  height: auto;
+  transform: translateY(-100%);
+  right: 0;
+}
+</style>
+
+<footer>
+  <div class="section layout-container relative">
+  <div class="footer-cat full-width">
+    <FooterCat></FooterCat>
+  </div>
+  <div class="stack -layout-xl">
+
+  <FurtherQuestions></FurtherQuestions>
+
+  <nav class="footer-container">
+    <ul class="list-reset -layout-m">
+      {NavItemsLeft.map(item => (
+        <li><a href={item.url}>{item.name}</a></li>
+      ))}
+    </ul>
+    <ul class="list-reset -layout-m">
+      {NavItemsRight.map(item => (
+        <li><a href={item.url}>{item.name}</a></li>
+      ))}
+    </ul>
+  </nav>
+  </div>
+  </div>
+
+</footer>

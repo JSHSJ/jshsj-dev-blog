@@ -1,0 +1,95 @@
+---
+import {Navigation} from "@/config/index.ts";
+
+import DefaultLayout from "@/layouts/DefaultLayout.astro";
+import BlogList from "@/components/BlogList.astro"
+import Pagination from "@/components/Pagination.astro"
+import TagFilter from "@/components/TagFilter.astro"
+import { slugify } from '@/utils/slugify';
+import { sortByDateDesc } from '@/utils/sortByDate';
+
+
+export async function getStaticPaths({paginate, rss}) {
+const title = "JSHSJ's dev blog"
+const description = "Yet another developer's blog"
+const currentRoute = Navigation.blogRoot.url
+
+
+const allBlog = await Astro.fetchContent("../../content/**/*.md");
+
+const formattedBlogposts = allBlog.map(bp => ({
+    ...bp,
+    slug: slugify(bp.title),
+})).sort(sortByDateDesc)
+
+const allTags = Array.from(new Set(allBlog
+.map(blog => blog.tags)
+.reduce((allTags, lang) => allTags.concat(lang), [])))
+
+rss({
+  title: title,
+  description: description,
+  customData: `
+  <author>
+    <name>Joshua Stübner</name>
+    <email>jshsj@hey.com</email>
+  </author>
+  `,
+  dest: '/feed/blog.xml',
+  items: formattedBlogposts.map(item => {
+    return {
+    title: item.title,
+    description: item.astro.html,
+    pubDate: item.date,
+    link: `${Navigation.blogPost.url}/${item.slug}`,
+    customData: `<id>${Astro.site}${Navigation.blogPost.url.substring(1)}/${item.slug}</id>`
+    }
+  }
+)
+})
+
+return paginate(formattedBlogposts, {
+  pageSize: 10,
+  props: {
+    title,
+    description,
+    currentRoute,
+    allTags
+  }
+})
+}
+
+
+const {page, title, description, currentRoute, allTags} = Astro.props;
+
+---
+<head>
+  {page.url.prev && <link rel="prev" href={page.url.prev} />}
+  {page.url.next && <link rel="next" href={page.url.next} />}
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title={title + ' | RSS Feed'}
+    href="/feed/blog.xml"
+  />
+
+
+</head>
+
+<DefaultLayout title={title} description={description} canonical={Astro.request.canonicalURL}>
+<div class="section layout-container blog-layout | mt-header">
+    <h1 class="section-title -with-dot -dot-top">All the things</h1>
+    <TagFilter hasReset={true} tags={allTags.map(tag => tag.toLowerCase())} tagName="Sprache" tagRootUrl="/blog/" selected="" hasPagination={true}/>
+
+    <BlogList blogPosts={page.data}></BlogList>
+    <Pagination current={page.currentPage} last={page.lastPage} next={page.url.next} prev={page.url.prev} basePath={currentRoute}></Pagination>
+
+    <div class="note -info flow w-full">
+    <p>Wanna keep up to date?</p>
+    <p><a href="/feed/blog.xml">RSS Feed</a></p>
+    </div>
+</div>
+</DefaultLayout>
+
+

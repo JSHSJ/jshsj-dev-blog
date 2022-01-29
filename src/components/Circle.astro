@@ -1,0 +1,79 @@
+---
+const paths = Array.from(Array(180));
+---
+<style lang="scss">
+.rotatingCircle {
+  --circleSize: 8rem;
+  position: relative;
+  width: var(--circleSize);
+  height: var(--circleSize);
+  background: var(--brand);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: rotate(var(--circleRotation));
+}
+
+.circleCenter {
+  position: relative;
+  width: 1px;
+  height: 1px;
+}
+
+
+.path {
+  width: 1px;
+  height: calc(var(--circleSize) * 1.48);
+  transform: rotate(var(--pathDeg)) scaleY(var(--pathScale));
+  background-color: var(--text1);
+  position: absolute;
+  transform-origin: 0% 0%;
+  transition: transform 2s;
+}
+</style>
+
+<div class="rotatingCircle">
+    <div class="circleCenter">
+    {paths.map((p, i) => (
+      <div class="path" data-deg={i * -2} style={`--pathScale: ${i * 2 > 180 && i * 2 < 270 ? 2 : 1}; --pathDeg: ${i * -2}deg`}></div>
+    ))}
+    </div>
+</div>
+
+
+<script lang="ts">
+const rotatingCircle = document.querySelector('.rotatingCircle');
+const paths = Array.from(document.querySelectorAll(".path"))
+
+let circleRotation = 0;
+let circleAnimationHandle;
+
+const circleRotationState = () => {
+  circleRotation = (circleRotation % 360) - 0.25;
+  rotatingCircle.style.setProperty("--circleRotation", `${circleRotation}deg`)
+
+  paths.forEach(p => {
+    let scale;
+    const deg = parseInt(p.getAttribute("data-deg"), 10);
+    const adjustedRot =( -1 * (deg + circleRotation)) % 360;
+    if (adjustedRot <= 180   && adjustedRot >= 90) {
+      scale = 2
+    } else {
+      scale = 1
+    }
+    p.style.setProperty("--pathScale", scale);
+  })
+
+  circleAnimationHandle = requestAnimationFrame(circleRotationState)
+}
+
+
+rotatingCircle.addEventListener("mouseenter", () => {
+  circleAnimationHandle = requestAnimationFrame(circleRotationState);
+})
+
+rotatingCircle.addEventListener("mouseleave", () => {
+  cancelAnimationFrame(circleAnimationHandle);
+})
+</script>
