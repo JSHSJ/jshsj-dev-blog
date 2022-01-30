@@ -9,6 +9,7 @@ interface AstroMarkdownHeader {
 }
 
 const { headers } = Astro.props;
+console.log(headers)
 ---
 {headers.length > 0 ? (
 <div class="sidebarNav">
@@ -38,6 +39,7 @@ const { headers } = Astro.props;
       grid-row-start: 1;
       padding-inline-end: var(--size-md);
       margin-inline-end: 0;
+      display: block;
     }
 
     .sidebarNav-list {
