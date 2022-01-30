@@ -1,5 +1,9 @@
-pre {
+pre, code {
   background-color: var(--code-background);
+}
+
+code {
+  padding-inline: var(--size-xs);
 }
 
 .token {
