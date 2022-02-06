@@ -3,3 +3,4 @@ node_modules
 .vscode
 dist
 src/content/search.json
+public/search.json

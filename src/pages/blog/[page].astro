@@ -7,6 +7,7 @@ import Pagination from "@/components/Pagination.astro"
 import TagFilter from "@/components/TagFilter.astro"
 import { slugify } from '@/utils/slugify';
 import { sortByDateDesc } from '@/utils/sortByDate';
+import fs from 'node:fs/promises';
 
 
 export async function getStaticPaths({paginate, rss}) {
@@ -20,7 +21,26 @@ const allBlog = await Astro.fetchContent("../../content/**/*.md");
 const formattedBlogposts = allBlog.map(bp => ({
     ...bp,
     slug: slugify(bp.title),
-})).sort(sortByDateDesc)
+})).sort(sortByDateDesc);
+
+// CREATE SEARCH HERE
+// NEEDS TO HAPPEN IN getStaticPaths
+
+const contentForSave = formattedBlogposts.map(post => ({
+    title: post.title,
+    description: post.description,
+    link: `${Navigation.blogPost.url}/${post.slug}`,
+    headers: post.astro.headers,
+    content: post.astro.source.replaceAll('\n', ''),
+}))
+
+const filePath = './public/search.json'
+
+fs.writeFile(filePath, JSON.stringify(contentForSave, null, 2)).then(() => {
+    console.log('File written successfully.');
+}).catch(err => {
+    console.error(err);
+});
 
 const allTags = Array.from(new Set(allBlog
 .map(blog => blog.tags)

@@ -13,20 +13,7 @@ const formattedBlogposts = allBlog.map(bp => ({
     slug: slugify(bp.title),
 })).sort(sortByDateDesc)
 
-// CREATE SEARCH HERE
-// speicher: title, description, link / slug, headers, source,
-
-const contentForSave = formattedBlogposts.map(post => ({
-    title: post.title,
-    description: post.description,
-    link: `${Navigation.blogPost.url}/${post.slug}`,
-    headers: post.astro.headers,
-    content: post.astro.source.replaceAll('\n', ''),
-}))
-
-const filePath = './src/content/search.json'
-
-await fs.writeFile(filePath, JSON.stringify(contentForSave, null, 2));
+const filePath = '/search.json'
 ---
 
     
