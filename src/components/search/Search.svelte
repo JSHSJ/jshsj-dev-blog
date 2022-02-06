@@ -101,7 +101,7 @@
   <p>Initialising...</p>
 {:else}
 <div class="stack -layout-xl">
-  <div class="stack -layout-m">
+  <form class="stack -layout-m">
   <Input
     name="search"
     label="Search"
@@ -112,11 +112,13 @@
   />
   <button
     class="CTA-button"
-    on:click={() => {
+    type="submit"
+    on:click={(e) => {
+      e.preventDefault();
       searchResults = searchContent(searchInput);
     }}>Search</button
   >
-  </div>
+  </form>
   {#if !searchResults}
   Start searching!
   {:else}
