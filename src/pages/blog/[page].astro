@@ -37,7 +37,7 @@ const contentForSave = formattedBlogposts.map(post => ({
 const filePath = './public/search.json'
 
 fs.writeFile(filePath, JSON.stringify(contentForSave, null, 2)).then(() => {
-    console.log('File written successfully.');
+    console.log('File written successfully.:', filePath);
 }).catch(err => {
     console.error(err);
 });
