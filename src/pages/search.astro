@@ -1,0 +1,40 @@
+---
+import fs from 'node:fs/promises';
+import {Navigation} from "@/config/index";
+import { slugify } from '@/utils/slugify';
+import { sortByDateDesc } from '@/utils/sortByDate';
+import Search from "@/components/search/Search.svelte";
+import DefaultLayout from "@/layouts/DefaultLayout.astro";
+
+const allBlog = await Astro.fetchContent("../content/**/*.md");
+
+const formattedBlogposts = allBlog.map(bp => ({
+    ...bp,
+    slug: slugify(bp.title),
+})).sort(sortByDateDesc)
+
+// CREATE SEARCH HERE
+// speicher: title, description, link / slug, headers, source,
+
+const contentForSave = formattedBlogposts.map(post => ({
+    title: post.title,
+    description: post.description,
+    link: `${Navigation.blogPost.url}/${post.slug}`,
+    headers: post.astro.headers,
+    content: post.astro.source.replaceAll('\n', ''),
+}))
+
+const filePath = './src/content/search.json'
+
+await fs.writeFile(filePath, JSON.stringify(contentForSave, null, 2));
+---
+
+    
+<DefaultLayout canonical={Astro.request.canonicalURL}>
+    <section class="layout-container mt-header section">
+<div class="full-width stack">
+<h1 class="section-title">Looking for something?</h1>
+        <Search client:visible filePath={filePath} />
+    </div>
+    </section>
+</DefaultLayout>

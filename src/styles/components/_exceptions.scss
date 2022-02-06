@@ -25,3 +25,9 @@
   margin-top: var(--s3);
   padding-block: var(--defaultPadding-vertical);
 }
+
+.no-link {
+  text-decoration: none !important;
+  color: var(--text2);
+  font-family: var(--fontFamilySans);
+}

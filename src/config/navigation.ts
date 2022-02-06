@@ -15,6 +15,10 @@ export const Navigation = {
     url: "/blog/post",
     name: "Blogpost",
   },
+  search: {
+    url: "/search",
+    name: "Search",
+  },
   imprint: {
     url: "https://joshuastuebner.com/impressum/",
     name: "Imprint",
