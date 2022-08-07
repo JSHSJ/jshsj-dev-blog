@@ -6,7 +6,7 @@ const filePath = '/search.json'
 ---
 
     
-<DefaultLayout canonical={Astro.request.canonicalURL}>
+<DefaultLayout canonical={new URL(Astro.url.pathname, Astro.site)}>
     <section class="layout-container mt-header section">
 <div class="full-width stack">
 <h1 class="section-title">Looking for something?</h1>

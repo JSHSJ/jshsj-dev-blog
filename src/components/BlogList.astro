@@ -3,41 +3,51 @@ import {Navigation} from "@/config/index.ts"
 const {blogPosts} = Astro.props;
 ---
 
-<style lang="scss">
-.blogPost {
+<style>
+
+  .list {
+    width: 100%;
+  }
+
+  .title {
+    font-size: var(--s2);
+    font-family: var(--fontFamilySans);
+    --fontWeight: var(--fontWeightBold);
+  }
 
   .meta {
     line-height: 1;
     align-items: center;
     font-family: var(--fontFamilyMono);
+    font-size: var(--s-1)
   }
 
-  .tags {
+  .badges {
     --gap: 0;
     align-items: baseline;
     font-size: var(--s-1);
-    color: var(--text2);
+    color: var(--color-text2);
     border-collapse: collapse;
-
-    & .jshsj-tag:not(:last-child) {
-      border-right: none;
-    }
   }
-}
+
+  .badges .badge:not(:last-child) {
+      border-right: none;
+   }
+
 </style>
 
-<ul class="list-reset stack -layout-xl w-full">
-{blogPosts.map((blogPost, postIndex) => (
+<ul class="list-reset stack -layout-xl -stretched">
+{blogPosts.map((blogPost) => (
     <li class="stack | blogPost">
       <article class="stack -layout-3xs">
-          <a href={`${Navigation.blogPost.url}/${blogPost.slug}`}><h2 class="typo-l -bold font-headline">
+          <a href={`${Navigation.blogPost.url}/${blogPost.slug}`}><h2 class="title">
           {blogPost.title}</h2>
           </a>
           <p>
           {blogPost.description}</p>
-          <div class="cluster typo-s -layout-3xs | meta">
-          <time class="date">Posted: {new Date(blogPost.date).toLocaleDateString()}</time>&nbsp;-&nbsp;<div class="cluster | tags">{blogPost.tags.map((tag, i) => (
-            <span class="jshsj-tag">{tag}</span>
+          <div class="cluster -layout-s | meta">
+          <time class="date">Posted: {new Date(blogPost.date).toLocaleDateString()}</time>&nbsp;-&nbsp;<div class="cluster | badges">{blogPost.tags.map((tag, i) => (
+            <span class="badge">{tag}</span>
           ))}
           </div>
           </div>

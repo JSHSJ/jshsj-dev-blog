@@ -6,6 +6,7 @@ import Pagination from "@/components/Pagination.astro"
 import TagFilter from "@/components/TagFilter.astro"
 import { slugify } from '@/utils/slugify.ts';
 import { sortByDateDesc } from '@/utils/sortByDate';
+import { BlogPost } from "@/src/types/BlogPost.type";
 
 
 export async function getStaticPaths({paginate}) {
@@ -13,16 +14,16 @@ const title = "JSHSJ's dev blog"
 const description = "Yet another developer's blog"
 const currentRoute = Navigation.blogRoot.url
 
-const allBlog = await Astro.fetchContent("../../../content/**/*.md");
+const allBlogPosts = await Astro.glob<BlogPost>("/src/content/**/*.md");
 
-const formattedBlogposts = allBlog.map(bp => ({
-    ...bp,
-    slug: slugify(bp.title),
+const formattedBlogposts = allBlogPosts.map(project => ({
+    ...project.frontmatter,
+    slug: slugify(project.frontmatter.title),
 })).sort(sortByDateDesc)
 
 // Create array for all keys
-const allTags = Array.from(new Set(allBlog
-.map(blog => blog.tags)
+const allTags = Array.from(new Set(allBlogPosts
+.map(blog => blog.frontmatter.tags)
 .reduce((allTags, lang) => allTags.concat(lang), [])))
 
 return allTags.map(tag => {
@@ -57,7 +58,7 @@ const {page, currentTag, allTags, currentRoute, title, description} = Astro.prop
 
 </head>
 
-<DefaultLayout title={`${title} nach Sprache: ${currentTag}`} description={description} canonical={Astro.request.canonicalURL}>
+<DefaultLayout title={`${title} nach Sprache: ${currentTag}`} description={description} canonical={new URL(Astro.url.pathname, Astro.site)}>
 <div class="section layout-container blog-layout | mt-header">
     <h1 class="section-title -with-dot -dot-top">Blog</h1>
     <TagFilter hasReset={true} tags={allTags.map(lang => lang.toLowerCase())} tagName="Sprache" tagRootUrl="/blog/" selected={currentTag} hasPagination={true} />

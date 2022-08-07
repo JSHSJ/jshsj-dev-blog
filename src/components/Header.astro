@@ -1,6 +1,5 @@
 ---
 import Themepicker from "./ThemePicker.astro"
-import MobileNav from "./MobileNav.astro"
 import {Navigation} from "@/config/index.ts"
 
 const NavItems = [
@@ -12,10 +11,10 @@ const NavItems = [
 <style>
 header {
   width: 100%;
-  padding-block: var(--size-s);
-  background: var(--surface1);
+  padding-block: var(--size-sm);
+  background: var(--color-surface1);
   z-index: 999;
-  border-bottom: var(--border-thin) solid var(--text1);
+  border-bottom: var(--border-thin) solid var(--color-text1);
 }
 
 .header-container {
@@ -24,19 +23,23 @@ header {
   width: 100%;
   gap: var(--size-md);
 }
+
+.themepicker {
+  margin-left: auto;
+}
 </style>
 
 <header>
-  <div class="layout-container | pblock-0">
-  <a href="#content-start" class="text-assistive">Zum Inhalt</a>
+  <div class="layout-container">
+  <a href="#content-start" class="text-assistive">Skip to content</a>
 
   <div class="header-container full-width">
-    <nav class="cluster">
+    <nav class="cluster | navCluster">
       {NavItems.map(item => (
         <a href={item.url}>{item.name}</a>
       ))}
     </nav>
-    <div class="ml-auto"><Themepicker></Themepicker></div>
+    <div class="themepicker"><Themepicker></Themepicker></div>
   </div>
   </div>
 

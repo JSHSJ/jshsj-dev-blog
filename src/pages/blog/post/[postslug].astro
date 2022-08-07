@@ -5,15 +5,17 @@ import DefaultLayout from "@/layouts/DefaultLayout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import SidebarNav from "@/components/SidebarNav.astro";
 
-import IconPageLink from "@/components/icons/Icon-PageLink.astro"
+import { BlogPost } from "@/src/types/BlogPost.type";
 
 export async function getStaticPaths() {
-  const allBlogPosts = await Astro.fetchContent("../../../content/**/*.md");
+  const allBlogPosts = await Astro.glob<BlogPost>("/src/content/**/*.md");
 
-  const blogWithSlugs = allBlogPosts.map(bp => ({
-    ...bp,
-    slug: slugify(bp.title),
-  }))
+    const blogWithSlugs = await Promise.all(allBlogPosts.map(async (bp) => ({
+    ...bp.frontmatter,
+    Content: bp.Content,
+    headers: await bp.getHeadings(),
+    slug: slugify(bp.frontmatter.title),
+  })))
 
   return blogWithSlugs.map(blogpost => {
     return {
@@ -23,10 +25,10 @@ export async function getStaticPaths() {
   })
 }
 
-const {pathname} = Astro.request.url;
+const {pathname} = Astro.site;
 const {blogpost} = Astro.props;
 
-const { Content } = blogpost;
+const { Content, headers } = blogpost;
 
 
 const blogpostCrumbs = [
@@ -38,15 +40,15 @@ const blogpostCrumbs = [
 <style>
 dl {
   padding-block: var(--size-md);
-  border-top: var(--border-thin) solid var(--text1);
-  border-bottom: var(--border-thin) solid var(--text1);
+  border-top: var(--border-thin) solid var(--color-text1);
+  border-bottom: var(--border-thin) solid var(--color-text1);
 }
 </style>
 
 
-<DefaultLayout title={blogpost.title} description={`${blogpost.title} - ${blogpost.tags.join(', ')}`} canonical={Astro.request.canonicalURL}>
+<DefaultLayout title={blogpost.title} description={`${blogpost.title} - ${blogpost.tags.join(', ')}`} canonical={new URL(Astro.url.pathname, Astro.site)}>
 <div class="layout-container mt-header">
-  <SidebarNav headers={blogpost.astro.headers}></SidebarNav>
+  <SidebarNav headers={headers}></SidebarNav>
   <div class="stack -layout-xl">
   <div>
     <Breadcrumbs crumbs={blogpostCrumbs}></Breadcrumbs>

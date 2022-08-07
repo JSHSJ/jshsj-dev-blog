@@ -112,6 +112,7 @@
   />
   <button
     class="CTA-button"
+    style="max-width: max-content;"
     type="submit"
     on:click={(e) => {
       e.preventDefault();

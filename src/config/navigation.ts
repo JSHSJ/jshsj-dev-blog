@@ -25,6 +25,6 @@ export const Navigation = {
   },
   dataPolicy: {
     url: "https://joshuastuebner.com/datenschutz/",
-    name: "Date Policy",
+    name: "Data Policy",
   },
 };

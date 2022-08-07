@@ -8,6 +8,7 @@ import TagFilter from "@/components/TagFilter.astro"
 import { slugify } from '@/utils/slugify';
 import { sortByDateDesc } from '@/utils/sortByDate';
 import fs from 'node:fs/promises';
+import { BlogPost } from "@/src/types/BlogPost.type";
 
 
 export async function getStaticPaths({paginate, rss}) {
@@ -16,22 +17,26 @@ const description = "Yet another developer's blog"
 const currentRoute = Navigation.blogRoot.url
 
 
-const allBlog = await Astro.fetchContent("../../content/**/*.md");
+const allBlog = await Astro.glob<BlogPost>("/src/content/**/*.md");
 
 const formattedBlogposts = allBlog.map(bp => ({
-    ...bp,
-    slug: slugify(bp.title),
+    ...bp.frontmatter,
+    slug: slugify(bp.frontmatter.title),
 })).sort(sortByDateDesc);
 
 // CREATE SEARCH HERE
 // NEEDS TO HAPPEN IN getStaticPaths
 
-const contentForSave = formattedBlogposts.map(post => ({
-    title: post.title,
-    description: post.description,
-    link: `${Navigation.blogPost.url}/${post.slug}`,
-    headers: post.astro.headers,
-    content: post.astro.source.replaceAll('\n', ''),
+const contentForSave = await Promise.all(allBlog.map(async post => {
+  const headings = await post.getHeadings()
+  const content = await post.compiledContent()
+  return {
+    title: post.frontmatter.title,
+    description: post.frontmatter.description,
+    link: `${Navigation.blogPost.url}/${slugify(post.frontmatter.title)}`,
+    headers: headings,
+    content: content.replaceAll('\n', ''),
+}
 }))
 
 const filePath = './public/search.json'
@@ -43,30 +48,8 @@ fs.writeFile(filePath, JSON.stringify(contentForSave, null, 2)).then(() => {
 });
 
 const allTags = Array.from(new Set(allBlog
-.map(blog => blog.tags)
+.map(blog => blog.frontmatter.tags)
 .reduce((allTags, lang) => allTags.concat(lang), [])))
-
-rss({
-  title: title,
-  description: description,
-  customData: `
-  <author>
-    <name>Joshua Stübner</name>
-    <email>jshsj@hey.com</email>
-  </author>
-  `,
-  dest: '/feed/blog.xml',
-  items: formattedBlogposts.map(item => {
-    return {
-    title: item.title,
-    description: item.astro.html,
-    pubDate: item.date,
-    link: `${Navigation.blogPost.url}/${item.slug}`,
-    customData: `<id>${Astro.site}${Navigation.blogPost.url.substring(1)}/${item.slug}</id>`
-    }
-  }
-)
-})
 
 return paginate(formattedBlogposts, {
   pageSize: 10,
@@ -97,7 +80,7 @@ const {page, title, description, currentRoute, allTags} = Astro.props;
 
 </head>
 
-<DefaultLayout title={title} description={description} canonical={Astro.request.canonicalURL}>
+<DefaultLayout title={title} description={description} canonical={new URL(Astro.url.pathname, Astro.site)}>
 <div class="section layout-container blog-layout | mt-header">
     <h1 class="section-title -with-dot -dot-top">All the things</h1>
     <TagFilter hasReset={true} tags={allTags.map(tag => tag.toLowerCase())} tagName="Sprache" tagRootUrl="/blog/" selected="" hasPagination={true}/>
